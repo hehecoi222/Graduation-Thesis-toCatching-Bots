@@ -1,4 +1,5 @@
 import re
+import os
 from p2p_clustering import file_handling
 import ipaddress
 import ipinfo_db
@@ -19,7 +20,6 @@ class Clustering:
         self.local_subnet = local_subnet
         
     def remove_same_hosting(self):
-        global p2p_clusters
         # Iterate through p2p clusters
         map_ip = {}
         coverage = {}
@@ -62,8 +62,11 @@ class Clustering:
             # Update the DDI count
             cluster['dd_set'] = new_dd_set
             cluster['ddi'] = len(new_dd_set)
+            
+        return remove_set
 
     def run(self):
+        src_index, dst_index, proto_index, bpp_in_index, bpp_out_index, g_bpp_in_index, g_bpp_out_index = 0, 0, 0, 0, 0, 0, 0
         with open(self.file) as f:
             l_index = 0
             for line in f:
@@ -129,5 +132,20 @@ class Clustering:
                 l_index += 1
                 if l_index % 500000 == 0:
                     print("Processed: ", l_index)
-                    
-        self.remove_same_hosting()
+        
+    def clean(self):
+        self.cluster = {}
+        self.p2p_clusters = {}
+        self.list_p2p = set()
+        self.len_cluster = 0
+        self.num_clusters = 0
+        try:
+            index = 0
+            while True:
+                if os.path.exists(f"out_cluster/clusters_{index}.pkl"):
+                    os.remove(f"out_cluster/clusters_{index}.pkl")
+                else:
+                    break
+                index += 1
+        except Exception as e:
+            print(f"Error removing old clusters: {e}")

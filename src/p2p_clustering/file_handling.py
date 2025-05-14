@@ -2,8 +2,10 @@ import pickle
 import os
 import re
 
-SRC_LABEL = "SrcIP"
-DST_LABEL = "DstIP"
+SRC_LABEL = "SrcAddr"
+DST_LABEL = "DstAddr"
+SPORT_LABEL = "Sport"
+DPORT_LABEL = "Dport"
 PROTO_LABEL = "Proto"
 BPP_IN_LABEL = "BppIn"
 BPP_OUT_LABEL = "BppOut"
@@ -33,6 +35,7 @@ def save_cluster(cluster, num_cluster):
         
 def define_index(line):
     l = re.split(r',|\n|\t', line)
+    src_index, dst_index, proto_index, bpp_in_index, bpp_out_index, g_bpp_in_index, g_bpp_out_index = -1, -1, -1, -1, -1, -1, -1
     for i, v in enumerate(l):
         if v == SRC_LABEL:
             src_index = i

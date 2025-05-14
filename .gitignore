@@ -178,5 +178,5 @@ cython_debug/
 input/
 
 # Ignore OUTPUT processing folder
-output/
+out_*/
 

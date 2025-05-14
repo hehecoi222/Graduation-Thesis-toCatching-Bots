@@ -74,8 +74,8 @@ def read_df_write_new(file_path: str, threshold_percent: float = 20.0) -> None:
     df = pd.read_csv(file_path)
     df[BPP_OUT_LABEL] = (df['SrcBytes'] / df['SrcPkts']).fillna(0).astype(int)
     df[BPP_IN_LABEL] = ((df['TotBytes'] - df['SrcBytes']) / (df['TotPkts'] - df['SrcPkts'])).fillna(0).astype(int)
-    df[G_BPP_OUT_LABEL] = group_nearby_integers(df[G_BPP_OUT_LABEL], threshold_percent=threshold_percent)
-    df[G_BPP_IN_LABEL] = group_nearby_integers(df[G_BPP_IN_LABEL], threshold_percent=threshold_percent)
+    df[G_BPP_OUT_LABEL] = group_nearby_integers(df[BPP_OUT_LABEL], threshold_percent=threshold_percent)
+    df[G_BPP_IN_LABEL] = group_nearby_integers(df[BPP_IN_LABEL], threshold_percent=threshold_percent)
     if not os.path.exists('out_file'):
         os.makedirs('out_file')
     df.to_csv('out_file/new_infile.csv', index=False)
